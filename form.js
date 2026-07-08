@@ -39,6 +39,7 @@ async function submitForm(email, password, dcId, dcUsername) {
   try {
     console.log(`[${email}] Login...`);
     await page.goto('https://accounts.google.com/signin', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('input[type="email"]', { timeout: 30000 });
     await page.fill('input[type="email"]', email);
     await page.click('#identifierNext');
     await page.waitForSelector('input[type="password"]', { timeout: 10000 });
@@ -82,12 +83,33 @@ async function submitForm(email, password, dcId, dcUsername) {
 }
 
 (async () => {
+  const readline = require('readline');
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const ask = (q) => new Promise(res => rl.question(q, res));
+
   const emails = readPairs('email.txt');
   const dcs    = readPairs('dc.txt');
-  const count  = Math.min(emails.length, dcs.length);
-  console.log(`Total akun: ${count}`);
+  const total  = Math.min(emails.length, dcs.length);
+  console.log(`Total akun: ${total}`);
 
-  for (let i = 0; i < count; i++) {
+  console.log('\nPilih mode:');
+  console.log('1. 1 akun tertentu');
+  console.log('2. Semua akun');
+  console.log('3. Dari akun X sampai akhir');
+  const mode = (await ask('Pilihan (1/2/3): ')).trim();
+
+  let start = 0, end = total;
+
+  if (mode === '1') {
+    const idx = parseInt(await ask(`Nomor akun (1-${total}): `)) - 1;
+    start = idx; end = idx + 1;
+  } else if (mode === '3') {
+    start = parseInt(await ask(`Mulai dari akun nomor (1-${total}): `)) - 1;
+  }
+
+  rl.close();
+
+  for (let i = start; i < end; i++) {
     const [email, password]  = emails[i];
     const [dcId, dcUsername] = dcs[i];
     await submitForm(email, password, dcId, dcUsername);
