@@ -38,7 +38,7 @@ async function submitForm(email, password, dcId, dcUsername) {
 
   try {
     console.log(`[${email}] Login...`);
-    await page.goto('https://accounts.google.com/signin', { waitUntil: 'networkidle' });
+    await page.goto('https://accounts.google.com/signin', { waitUntil: 'domcontentloaded' });
     await page.fill('input[type="email"]', email);
     await page.click('#identifierNext');
     await page.waitForSelector('input[type="password"]', { timeout: 10000 });
