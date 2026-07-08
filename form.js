@@ -42,6 +42,7 @@ async function submitForm(email, password, dcId, dcUsername) {
     await page.waitForSelector('#identifierId', { timeout: 30000 });
     await page.fill('#identifierId', email);
     await page.click('#identifierNext');
+    await page.waitForTimeout(3000);
     await page.waitForSelector('input[type="password"]:not([aria-hidden="true"])', { timeout: 10000 });
     await page.fill('input[type="password"]:not([aria-hidden="true"])', password);
     await page.click('#passwordNext');
