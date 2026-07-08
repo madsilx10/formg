@@ -43,8 +43,8 @@ async function submitForm(email, password, dcId, dcUsername) {
     await page.fill('#identifierId', email);
     await page.click('#identifierNext');
     await page.waitForTimeout(3000);
-    await page.waitForSelector('input[type="password"]:not([aria-hidden="true"])', { timeout: 10000 });
-    await page.fill('input[type="password"]:not([aria-hidden="true"])', password);
+    await page.waitForSelector('input[name="Passwd"]', { timeout: 10000 });
+    await page.fill('input[name="Passwd"]', password);
     await page.click('#passwordNext');
     await page.waitForURL(/myaccount|google\.com\/(?!accounts)/, { timeout: 15000 });
     console.log(`[${email}] Login berhasil!`);
