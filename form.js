@@ -43,6 +43,8 @@ async function submitForm(email, password, dcId, dcUsername) {
     await page.fill('#identifierId', email);
     await page.click('#identifierNext');
     await page.waitForTimeout(3000);
+    await page.screenshot({ path: 'after_email.png' });
+    console.log(`[${email}] Screenshot disimpan: after_email.png`);
     await page.waitForSelector('input[name="Passwd"]', { timeout: 10000 });
     await page.fill('input[name="Passwd"]', password);
     await page.click('#passwordNext');
